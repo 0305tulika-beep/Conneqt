@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+╔══════════════════════════════════════════════════════════╗
+║         CONNEQT  (Dashboard)          ║
+║  Dark navy theme  •  #0A0E1A bg  •  Green accent         ║
+║                                                          ║
+║  SCREEN STRUCTURE:                                       ║
+║  1. Header  → Greeting + Professor name + avatar         ║
+║  2. Stats   → Students | Classes | SMS Sent              ║
+║  3. Recent Classes label + "See all" link                ║
+║  4. RecyclerView → grid of class cards                   ║
+║  5. FAB "NEW CLASS" bottom-right                         ║
+╚══════════════════════════════════════════════════════════╝
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0A0E1A"
+    tools:context="com.example.conneqt.MainActivity">
+
+    <!-- ═══════════════════════════════════════════════
+         SCROLLABLE CONTENT AREA
+         Everything inside scrolls EXCEPT the FAB
+         ═══════════════════════════════════════════════ -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="100dp">
+
+            <!-- ═══════════════════════════════════════
+                 HEADER SECTION
+                 ───────────────────────────────────────
+                 Left side  → greeting text + Prof name
+                 Right side → circular profile avatar
+                 ═══════════════════════════════════════ -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="25dp"
+                android:paddingBottom="20dp">
+
+                <!-- Left: Greeting + Name stacked vertically -->
+                <LinearLayout
+                    android:id="@+id/layoutGreeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true">
+
+                    <!-- "Good Morning ☀" -->
+                    <TextView
+                        android:id="@+id/tvGreeting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Good Morning ☀"
+                        android:textSize="13sp"
+                        android:textColor="#8892A4"
+                        android:letterSpacing="0.05"
+                        android:fontFamily="sans-serif"/>
+
+                    <!-- "Professor" — big bold title -->
+                    <TextView
+                        android:id="@+id/tvProfName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Professor"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="-0.02"
+                        android:fontFamily="sans-serif-medium"
+                        tools:text="Prof. Sharma"/>
+
+                </LinearLayout>
+
+                <!-- Right: Profile Avatar (circle) -->
+                <!-- In Kotlin: load professor photo using Glide/Picasso into ivAvatar -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardAvatar"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="23dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="#1A2236">
+
+                    <ImageView
+                        android:id="@+id/ivAvatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_person"
+                        android:contentDescription="Profile picture"/>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+            <!-- ═══════════════════════════════════════
+                 STATS ROW — Students | Classes | SMS Sent
+                 ───────────────────────────────────────
+                 3 equal boxes side by side
+                 Dark card background #111827
+                 Numbers in white, labels in grey
+                 ═══════════════════════════════════════ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="24dp">
+
+                <!-- ── STAT BOX 1: Students ── -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#111827"
+                    app:strokeColor="#1E2D45"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingVertical="18dp">
+
+                        <TextView
+                            android:id="@+id/tvStudentCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Students"
+                            android:textSize="11sp"
+                            android:textColor="#8892A4"
+                            android:layout_marginTop="2dp"/>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ── STAT BOX 2: Classes ── -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#111827"
+                    app:strokeColor="#1E2D45"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingVertical="18dp">
+
+                        <TextView
+                            android:id="@+id/tvClassCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Classes"
+                            android:textSize="11sp"
+                            android:textColor="#8892A4"
+                            android:layout_marginTop="2dp"/>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- ═══════════════════════════════════════
+                 "Recent Classes" HEADER ROW
+                 Left → section label
+                 Right → "See all →" clickable link
+                 ═══════════════════════════════════════ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:paddingBottom="12dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="All Classes"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="sans-serif-medium"/>
+
+            </LinearLayout>
+
+            <!-- ═══════════════════════════════════════
+                 RECYCLERVIEW — CLASS CARDS GRID
+                 ───────────────────────────────────────
+                 HOW RECYCLERVIEW WORKS (explained below):
+                 ─────────────────────────────────────────
+                 RecyclerView is like a smart list that only
+                 creates as many card Views as fit on screen,
+                 then RE-USES (recycles) them as you scroll.
+
+                 For example, if you have 20 classes but only
+                 6 fit on screen, RecyclerView only inflates
+                 ~8 card views total and swaps data in/out.
+
+                 HOW TO SET IT UP IN Kotlin (MainActivity.kt):
+                 ─────────────────────────────────────────────
+                 Step 1 → Get reference:
+                   val rv = findViewById<RecyclerView>(R.id.rvClasses)
+
+                 Step 2 → Set layout manager (how cards are arranged):
+                   rv.layoutManager = GridLayoutManager(this, 2)
+                   // 2 = 2 columns side by side
+
+                 Step 3 → Create an Adapter class (see ClassAdapter.kt)
+                   val adapter = ClassAdapter(classList) { classModel ->
+                       // This runs when professor taps a class card
+                       val intent = Intent(this, StudentListActivity::class.java)
+                       intent.putExtra("classId", classModel.id)
+                       startActivity(intent)
+                   }
+
+                 Step 4 → Attach adapter to RecyclerView:
+                   rv.adapter = adapter
+
+                 Step 5 → When data changes (e.g. new class added):
+                   adapter.notifyDataSetChanged()
+                 ─────────────────────────────────────────────
+                 Each card is inflated from: item_class_card.xml
+                 ═══════════════════════════════════════════════ -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvClasses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                tools:listitem="@layout/item_class_card"
+                tools:itemCount="4"
+                tools:layoutManager="GridLayoutManager"
+                tools:spanCount="2"/>
+
+            <!-- ── EMPTY STATE (GONE by default, shown in Kotlin when list is empty) ── -->
+            <LinearLayout
+                android:id="@+id/layoutEmptyState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingVertical="60dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📂"
+                    android:textSize="56sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="No classes yet"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Tap NEW CLASS to upload\nyour first Excel sheet"
+                    android:textSize="13sp"
+                    android:textColor="#8892A4"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- ═══════════════════════════════════════
+         "NEW CLASS" BUTTON — bottom right
+         ───────────────────────────────────────
+         Uses ExtendedFAB so it shows text + icon
+         Green background matching the screenshot
+         In Kotlin: open file picker for .xlsx
+         ═══════════════════════════════════════ -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabNewClass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:text="NEW CLASS"
+        android:textColor="#424242"
+        android:textSize="12sp"
+        android:letterSpacing="0.08"
+        android:fontFamily="sans-serif-medium"
+        app:icon="@drawable/ic_add"
+        app:iconTint="@android:color/white"
+        app:backgroundTint="#3DDC84"
+        app:elevation="8dp"
+        app:rippleColor="#2BB870"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

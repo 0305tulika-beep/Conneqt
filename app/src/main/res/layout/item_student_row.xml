@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+╔══════════════════════════════════════════════════════════╗
+║     CONNEQT — item_student_row.xml                       ║
+║  Single student row inflated inside rvStudents           ║
+║                                                          ║
+║  ┌────────────────────────────────────────────────────┐  ║
+║  │  [A]  Aryan Mehta           📱  📞                 │  ║
+║  │       2021-CS-045           ✓ Delivered            │  ║
+║  │       +91 98765 43210                              │  ║
+║  └────────────────────────────────────────────────────┘  ║
+╚══════════════════════════════════════════════════════════╝
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="#111827"
+    app:strokeColor="#1E2D45"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        android:gravity="center_vertical">
+
+        <!-- ── AVATAR: first letter of student name ── -->
+        <!--
+        In StudentAdapter.kt:
+            val colors = listOf("#3DDC84","#2979FF","#FF6D00","#D500F9")
+            val color = colors[position % colors.size]
+            tvAvatar.setBackgroundColor(Color.parseColor(color))
+            tvAvatar.text = student.name.first().uppercaseChar().toString()
+        -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            app:cardCornerRadius="21dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#1A3DDC84">
+
+            <TextView
+                android:id="@+id/tvAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="A"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#3DDC84"
+                android:fontFamily="sans-serif-medium"
+                tools:text="R"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- ── STUDENT INFO (middle, flexible width) ── -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <!-- Student full name -->
+            <TextView
+                android:id="@+id/tvStudentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Student Name"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Aryan Mehta"/>
+
+            <!-- Student Number -->
+            <TextView
+                android:id="@+id/tvStudentNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Student No"
+                android:textSize="11sp"
+                android:textColor="#8892A4"
+                android:layout_marginTop="1dp"
+                tools:text="2021-CS-045"/>
+
+            <!-- ── SMS STATUS BADGE ── -->
+            <!--
+            In Kotlin, update this based on message status:
+              SENT      → text="✓ Sent"       textColor="#8892A4"
+              DELIVERED → text="✓✓ Delivered" textColor="#3DDC84"
+              READ      → text="✓✓ Read"      textColor="#2979FF"
+              REPLIED   → text="↩ Replied"    textColor="#FF6D00"
+              NONE      → visibility = GONE
+            -->
+
+
+        </LinearLayout>
+
+        <!-- ── ACTION BUTTONS (right side) ── -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- SMS Button -->
+            <!--
+            In StudentAdapter.kt:
+              btnSms.setOnClickListener {
+                  val smsUri = Uri.parse("smsto:${student.phone}")
+                  val intent = Intent(Intent.ACTION_SENDTO, smsUri)
+                  intent.putExtra("sms_body", "")
+                  context.startActivity(intent)
+                  // Also update status to SENT in your database
+              }
+            -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btnSms"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#1A3DDC84">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/img"
+                    app:tint="#3DDC84"
+                    android:contentDescription="Send SMS"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Call Button -->
+            <!--
+            In StudentAdapter.kt:
+              btnCall.setOnClickListener {
+                  val callUri = Uri.parse("tel:${student.phone}")
+                  val intent = Intent(Intent.ACTION_DIAL, callUri)
+                  context.startActivity(intent)
+              }
+            -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btnCall"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#1A2979FF">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_call"
+                    app:tint="#2979FF"
+                    android:contentDescription="Call student"/>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

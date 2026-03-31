@@ -1,0 +1,12 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- Accent color (you can change this) -->
+    <solid android:color="?attr/colorSecondary"/>
+
+    <!-- Size of the dot -->
+    <size
+        android:width="8dp"
+        android:height="8dp"/>
+
+</shape>

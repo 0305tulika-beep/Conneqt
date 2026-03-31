@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+╔══════════════════════════════════════════════════════════╗
+║     CONNEQT — activity_student_list.xml                  ║
+║  Opens when professor taps a class card                  ║
+║                                                          ║
+║  Contains:                                               ║
+║  1. Toolbar → Back arrow + Class name                    ║
+║  2. Class info card → Total students + Messages sent     ║
+║  3. Search bar → filter students                         ║
+║  4. RecyclerView → list of student rows                  ║
+║     Each row: Name | Student No | Phone | Email          ║
+║               + SMS button + Call button                 ║
+╚══════════════════════════════════════════════════════════╝
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0A0E1A"
+    tools:context="com.example.conneqt.StudentListActivity">
+
+    <!-- ═══════════════════════════════════════
+         TOOLBAR — Back arrow + Class name
+         ───────────────────────────────────────
+         In Kotlin:
+           setSupportActionBar(toolbar)
+           supportActionBar?.setDisplayHomeAsUpEnabled(true)
+           title = classModel.name
+         ═══════════════════════════════════════ -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#0A0E1A"
+        app:title="Student List"
+        app:titleTextColor="#FFFFFF"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@android:color/white"
+        app:menu="@menu/student_list_menu"/>
+
+    <!-- ═══════════════════════════════════════
+         CLASS INFO CARD
+         ───────────────────────────────────────
+         Shows: class name, student count, messages sent
+         ═══════════════════════════════════════ -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#111827"
+        app:strokeColor="#1E2D45"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="18dp"
+            android:gravity="center_vertical">
+
+            <!-- Left: class icon -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#1A3DDC84">
+
+                <TextView
+                    android:id="@+id/tvHeaderClassIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="📘"
+                    android:textSize="20sp"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Middle: class name + subtitle -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <TextView
+                    android:id="@+id/tvHeaderClassName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Class Name"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="sans-serif-medium"
+                    tools:text="Data Structures CS-301"/>
+
+                <TextView
+                    android:id="@+id/tvHeaderStudentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 students"
+                    android:textSize="12sp"
+                    android:textColor="#8892A4"
+                    android:layout_marginTop="2dp"
+                    tools:text="42 students"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- ═══════════════════════════════════════
+         SEARCH BAR
+         ───────────────────────────────────────
+         In Kotlin: filter the student list as user types
+           etSearch.addTextChangedListener { query ->
+               adapter.filter(query.toString())
+           }
+         ═══════════════════════════════════════ -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#111827"
+        app:strokeColor="#1E2D45"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="12dp">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_search"
+                app:tint="#8892A4"
+                android:contentDescription="search"/>
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:background="@null"
+                android:hint="Search student..."
+                android:hintTextColor="#FFFFFF"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:inputType="textPersonName"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- ═══════════════════════════════════════
+         RECYCLERVIEW — STUDENT ROWS
+         ───────────────────────────────────────
+         HOW IT WORKS HERE:
+         ─────────────────
+         Unlike the dashboard grid (2 columns), here we use
+         LinearLayoutManager → one student per row.
+
+         In StudentListActivity.kt:
+           val rv = findViewById<RecyclerView>(R.id.rvStudents)
+           rv.layoutManager = LinearLayoutManager(this)
+           rv.adapter = StudentAdapter(studentList,
+               onSmsClick  = { student -> openSms(student.phone) },
+               onCallClick = { student -> callStudent(student.phone) }
+           )
+
+         Each row is inflated from: item_student_row.xml
+         ═══════════════════════════════════════════════ -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvStudents"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        tools:listitem="@layout/item_student_row"
+        tools:itemCount="8"/>
+
+    <!-- ── EMPTY STATE ── -->
+    <LinearLayout
+        android:id="@+id/layoutEmptyStudents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingVertical="40dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎓"
+            android:textSize="48sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="No students found"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"/>
+
+    </LinearLayout>
+
+</LinearLayout>
