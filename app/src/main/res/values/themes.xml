@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Conneqt" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Main app theme — ALL activities use this -->
+    <style name="Theme.Conneqt" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#0A0E1A</item>
+        <item name="android:statusBarColor">#0A0E1A</item>
+        <item name="android:navigationBarColor">#0A0E1A</item>
+        <item name="colorPrimary">#4A90E2</item>
+        <item name="colorPrimaryDark">#0A0E1A</item>
+        <item name="colorAccent">#4A90E2</item>
+    </style>
+
+    <!-- Splash screen theme — no flicker -->
+    <style name="Theme.Conneqt.Splash" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#0A0E1A</item>
+        <item name="android:statusBarColor">#0A0E1A</item>
+        <item name="android:navigationBarColor">#0A0E1A</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
 </resources>

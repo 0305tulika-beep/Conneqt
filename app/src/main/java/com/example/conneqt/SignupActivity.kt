@@ -29,7 +29,7 @@ class SignupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
-        setContentView(R.layout.activity_signup)
+        setContentView(R.layout.signup_screen)
 
         auth      = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()

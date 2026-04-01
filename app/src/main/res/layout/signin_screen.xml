@@ -115,8 +115,8 @@
                         android:hint="professor@university.edu"
                         android:inputType="textEmailAddress"
                         android:padding="16dp"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#3D4557"
+                        android:textColor="#3D4557"
+                        android:textColorHint="#B0BEC5"
                         android:textSize="15sp"
                         android:background="@drawable/input_bg"
                         android:layout_marginBottom="20dp" />
@@ -139,8 +139,8 @@
                         android:hint="••••••••"
                         android:inputType="textPassword"
                         android:padding="16dp"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#3D4557"
+                        android:textColor="#3D4557"
+                        android:textColorHint="#B0BEC5"
                         android:textSize="15sp"
                         android:background="@drawable/input_bg"
                         android:layout_marginBottom="28dp" />

@@ -50,7 +50,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     // Firebase BOM must come first — it manages all Firebase versions
-    implementation(platform("com.google.firebase:firebase-bom:34.11.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-analytics")

@@ -108,8 +108,8 @@
                         android:layout_height="54dp"
                         android:hint="Dr. John Doe"
                         android:padding="16dp"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#3D4557"
+                        android:textColor="#3D4557"
+                        android:textColorHint="#B0BEC5"
                         android:background="@drawable/input_bg"
                         android:layout_marginBottom="18dp"/>
 
@@ -131,8 +131,8 @@
                         android:hint="professor@university.edu"
                         android:inputType="textEmailAddress"
                         android:padding="16dp"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#3D4557"
+                        android:textColor="#3D4557"
+                        android:textColorHint="#B0BEC5"
                         android:background="@drawable/input_bg"
                         android:layout_marginBottom="18dp"/>
 
@@ -154,8 +154,8 @@
                         android:inputType="textPassword"
                         android:hint="••••••••"
                         android:padding="16dp"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#3D4557"
+                        android:textColor="#3D4557"
+                        android:textColorHint="#B0BEC5"
                         android:background="@drawable/input_bg"
                         android:layout_marginBottom="18dp"/>
 
@@ -177,8 +177,8 @@
                         android:inputType="textPassword"
                         android:hint="••••••••"
                         android:padding="16dp"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#3D4557"
+                        android:textColor="#3D4557"
+                        android:textColorHint="#B0BEC5"
                         android:background="@drawable/input_bg"
                         android:layout_marginBottom="24dp"/>
 

@@ -3,7 +3,6 @@ package com.example.conneqt
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.conneqt.databinding.ItemStudentRowBinding
@@ -12,12 +11,11 @@ class StudentAdapter(
     private val studentList: MutableList<StudentModel>
 ) : RecyclerView.Adapter<StudentAdapter.ViewHolder>() {
 
-    // Avatar background colors — cycles through for each student
     private val avatarColors = listOf(
-        "#1A3DDC84",  // green tint
-        "#1A2979FF",  // blue tint
-        "#1AFF6D00",  // orange tint
-        "#1AD500F9"   // purple tint
+        "#1A3DDC84",
+        "#1A2979FF",
+        "#1AFF6D00",
+        "#1AD500F9"
     )
     private val avatarTextColors = listOf(
         "#3DDC84", "#2979FF", "#FF6D00", "#D500F9"
@@ -39,7 +37,7 @@ class StudentAdapter(
 
         holder.binding.apply {
 
-            // ── AVATAR: first letter + cycling color ──
+            // ── AVATAR ──
             tvAvatar.text = student.name.first().uppercaseChar().toString()
             tvAvatar.setTextColor(
                 android.graphics.Color.parseColor(avatarTextColors[position % avatarTextColors.size])
@@ -53,36 +51,7 @@ class StudentAdapter(
             tvStudentName.text = student.name
             tvStudentNo.text   = student.studentNo
 
-            // ── SMS STATUS BADGE ──
-            // Shows different text + color based on where the message is
-            when (student.smsStatus) {
-                SmsStatus.NONE -> {
-                    tvSmsStatus.visibility = View.GONE
-                }
-                SmsStatus.SENT -> {
-                    tvSmsStatus.visibility = View.VISIBLE
-                    tvSmsStatus.text = "✓ Sent"
-                    tvSmsStatus.setTextColor(android.graphics.Color.parseColor("#8892A4"))
-                }
-                SmsStatus.DELIVERED -> {
-                    tvSmsStatus.visibility = View.VISIBLE
-                    tvSmsStatus.text = "✓✓ Delivered"
-                    tvSmsStatus.setTextColor(android.graphics.Color.parseColor("#3DDC84"))
-                }
-                SmsStatus.READ -> {
-                    tvSmsStatus.visibility = View.VISIBLE
-                    tvSmsStatus.text = "✓✓ Read"
-                    tvSmsStatus.setTextColor(android.graphics.Color.parseColor("#2979FF"))
-                }
-                SmsStatus.REPLIED -> {
-                    tvSmsStatus.visibility = View.VISIBLE
-                    tvSmsStatus.text = "↩ Replied"
-                    tvSmsStatus.setTextColor(android.graphics.Color.parseColor("#FF6D00"))
-                }
-            }
-
             // ── SMS BUTTON ──
-            // Opens the phone's native SMS app with student number pre-filled
             btnSms.setOnClickListener {
                 val smsUri = Uri.parse("smsto:${student.phone}")
                 val intent = Intent(Intent.ACTION_SENDTO, smsUri)
@@ -91,7 +60,6 @@ class StudentAdapter(
             }
 
             // ── CALL BUTTON ──
-            // Opens the phone dialer with student number pre-filled
             btnCall.setOnClickListener {
                 val callUri = Uri.parse("tel:${student.phone}")
                 val intent = Intent(Intent.ACTION_DIAL, callUri)
@@ -100,7 +68,6 @@ class StudentAdapter(
         }
     }
 
-    // Search/filter function — called when professor types in search bar
     fun filter(query: String, originalList: List<StudentModel>) {
         studentList.clear()
         if (query.isEmpty()) {
