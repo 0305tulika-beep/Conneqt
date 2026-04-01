@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-╔══════════════════════════════════════════════════════════╗
-║       CONNEQT — item_class_card.xml                      ║
-║  Single class card inflated by RecyclerView adapter      ║
-║                                                          ║
-║  ┌─────────────┐  ┌─────────────┐                        ║
-║  │ 📘          │  │ 📗          │  ← icon top-left       ║
-║  │ CS-301      │  │ Math-201    │  ← class name          ║
-║  │ 42 students │  │ 38 students │  ← student count       ║
-║  └─────────────┘  └─────────────┘                        ║
-╚══════════════════════════════════════════════════════════╝
-
-RecyclerView will INFLATE this layout once per class in your list.
-ClassAdapter.kt binds data (name, student count, color) to each view.
--->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -31,126 +16,131 @@ ClassAdapter.kt binds data (name, student count, color) to each view.
     app:strokeWidth="1dp"
     app:rippleColor="#1A3DDC84">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
-        <!-- ── CLASS COLOR ICON (top-left square) ── -->
-        <!-- In ClassAdapter.kt, set a random accent color per class -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="#1A3DDC84">
-
-            <!--
-            In Kotlin Adapter → set emoji or first letter of class:
-                tvClassIcon.text = classModel.emoji  // e.g. "📘"
-            OR use first letter:
-                tvClassIcon.text = classModel.name.first().toString()
-            -->
-            <TextView
-                android:id="@+id/tvClassIcon"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="📘"
-                android:textSize="22sp"
-                tools:text="📗"/>
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- ── CLASS NAME ── -->
-        <!--
-        In Kotlin Adapter:
-            tvClassName.text = classModel.name  // e.g. "Data Structures (CS301)"
-        -->
-        <TextView
-            android:id="@+id/tvClassName"
+        <!-- MAIN CARD CONTENT -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Class Name"
-            android:textSize="14sp"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- CLASS COLOR ICON -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#1A3DDC84">
+
+                <TextView
+                    android:id="@+id/tvClassIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="📘"
+                    android:textSize="22sp"
+                    tools:text="📗"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- CLASS NAME -->
+            <TextView
+                android:id="@+id/tvClassName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Class Name"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="Data Structures&#10;CS-301"/>
+
+            <!-- STUDENT COUNT -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_person"
+                    app:tint="#8892A4"
+                    android:contentDescription="students"/>
+
+                <TextView
+                    android:id="@+id/tvStudentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="0 students"
+                    android:textSize="12sp"
+                    android:textColor="#8892A4"
+                    tools:text="42 students"/>
+
+            </LinearLayout>
+
+            <!-- DIVIDER -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="#1E2D45"/>
+
+            <!-- BOTTOM ROW -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/tvUploadDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Jan 2025"
+                    android:textSize="11sp"
+                    android:textColor="#8892A4"
+                    tools:text="Mar 2025"/>
+
+                <View
+                    android:id="@+id/dotActive"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/circle_green"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- DELETE BUTTON (TOP RIGHT) -->
+        <TextView
+            android:id="@+id/btnDeleteClass"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="−"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:fontFamily="sans-serif-medium"
-            android:maxLines="2"
-            android:ellipsize="end"
-            tools:text="Data Structures\nCS-301"/>
+            android:background="@drawable/delete_circle_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:elevation="4dp"/>
 
-        <!-- ── STUDENT COUNT ── -->
-        <!--
-        In Kotlin Adapter:
-            tvStudentCount.text = "${classModel.studentCount} students"
-        -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="6dp">
-
-            <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/ic_person"
-                app:tint="#8892A4"
-                android:contentDescription="students"/>
-
-            <TextView
-                android:id="@+id/tvStudentCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="0 students"
-                android:textSize="12sp"
-                android:textColor="#8892A4"
-                tools:text="42 students"/>
-
-        </LinearLayout>
-
-        <!-- ── DIVIDER ── -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="#1E2D45"/>
-
-        <!-- ── BOTTOM ROW: Date uploaded + green dot indicator ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/tvUploadDate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Jan 2025"
-                android:textSize="11sp"
-                android:textColor="#8892A4"
-                tools:text="Mar 2025"/>
-
-            <!--
-                Green dot = active class
-                In Kotlin: show/hide based on classModel.isActive
-            -->
-            <View
-                android:id="@+id/dotActive"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:background="@drawable/circle_green"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
 </com.google.android.material.card.MaterialCardView>

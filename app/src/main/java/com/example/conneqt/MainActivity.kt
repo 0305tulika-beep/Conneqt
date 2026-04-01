@@ -36,13 +36,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        classAdapter = ClassAdapter(classList) { classModel ->
-            // This runs when professor taps a class card
-            val intent = Intent(this, StudentListActivity::class.java)
-            intent.putExtra("CLASS_NAME", classModel.name)
-            intent.putExtra("CLASS_ID", classModel.id)
-            startActivity(intent)
-        }
+        classAdapter = ClassAdapter(
+            classList = classList,
+            onClick = { classModel ->
+                val intent = Intent(this, StudentListActivity::class.java)
+                intent.putExtra("CLASS_NAME", classModel.name)
+                intent.putExtra("CLASS_ID", classModel.id)
+                startActivity(intent)
+            },
+            onDelete = { classModel, position ->
+                classList.removeAt(position)               // remove from list
+                classAdapter.notifyItemRemoved(position)   // animate card out
+                updateUI()                                 // update counts
+            }
+        )
 
         binding.rvClasses.apply {
             layoutManager = GridLayoutManager(this@MainActivity, 2)
