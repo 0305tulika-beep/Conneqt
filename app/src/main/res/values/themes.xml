@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Main app theme — ALL activities use this -->
-    <style name="Theme.Conneqt" parent="Theme.AppCompat.NoActionBar">
+    <!-- Main theme — satisfies BOTH AppCompat AND MaterialComponents -->
+    <style name="Theme.Conneqt" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">#0A0E1A</item>
         <item name="android:statusBarColor">#0A0E1A</item>
         <item name="android:navigationBarColor">#0A0E1A</item>
         <item name="colorPrimary">#4A90E2</item>
-        <item name="colorPrimaryDark">#0A0E1A</item>
-        <item name="colorAccent">#4A90E2</item>
+        <item name="colorPrimaryVariant">#1A2D4A</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#3DDC84</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="colorSurface">#141824</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="colorError">#FF5252</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <item name="android:colorBackground">#0A0E1A</item>
+        <item name="colorOnBackground">#FFFFFF</item>
     </style>
 
-    <!-- Splash screen theme — no flicker -->
-    <style name="Theme.Conneqt.Splash" parent="Theme.AppCompat.NoActionBar">
+    <!-- Splash screen theme -->
+    <style name="Theme.Conneqt.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">#0A0E1A</item>
         <item name="android:statusBarColor">#0A0E1A</item>
         <item name="android:navigationBarColor">#0A0E1A</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="colorPrimary">#4A90E2</item>
+        <item name="colorPrimaryVariant">#1A2D4A</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#3DDC84</item>
+        <item name="colorSurface">#141824</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="colorError">#FF5252</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <item name="android:colorBackground">#0A0E1A</item>
+        <item name="colorOnBackground">#FFFFFF</item>
     </style>
 
 </resources>
