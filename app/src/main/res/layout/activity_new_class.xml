@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    NewClassActivity
+    Form to create a new class — matches Conneqt dark theme.
+
+    Fields:
+      - Class Name  (e.g. "Computer Science")
+      - Class Code  (e.g. "BCS-401")
+      - Section     (e.g. "A")
+      - Excel upload area (tap to pick .xlsx file)
+
+    Buttons:
+      - UPLOAD EXCEL  → file picker
+      - CREATE CLASS  → saves and goes back
+
+    IDs to wire in NewClassActivity.kt:
+      etClassName, etClassCode, etSection,
+      layoutUploadArea, tvFileName, tvFileHint,
+      btnCreateClass, progressBar, tvGoBack
+-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0A0E1A">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="28dp"
+            android:paddingTop="56dp"
+            android:paddingBottom="40dp">
+
+            <!-- ── Brand header ── -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Conneqt"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/dot_accent" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add a new class"
+                android:textSize="13sp"
+                android:textColor="#4A90E2"
+                android:letterSpacing="0.06"
+                android:layout_marginBottom="36dp" />
+
+            <!-- ── Form card ── -->
+            <androidx.cardview.widget.CardView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#141824">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="28dp">
+
+                    <!-- Card title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Class Details"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fill in the info below"
+                        android:textSize="13sp"
+                        android:textColor="#8892A4"
+                        android:layout_marginBottom="28dp" />
+
+                    <!-- CLASS NAME -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BRANCH"
+                        android:textSize="11sp"
+                        android:textColor="#4A90E2"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.12"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/etClassName"
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp"
+                        android:hint="e.g. CSE"
+                        android:inputType="textCapWords"
+                        android:padding="16dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#8892A4"
+                        android:textSize="15sp"
+                        android:background="@drawable/input_bg"
+                        android:layout_marginBottom="20dp" />
+
+                    <!-- CLASS CODE -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CLASS CODE"
+                        android:textSize="11sp"
+                        android:textColor="#4A90E2"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.12"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/etClassCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp"
+                        android:hint="e.g. BCS-401"
+                        android:inputType="textCapCharacters"
+                        android:padding="16dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#8892A4"
+                        android:textSize="15sp"
+                        android:background="@drawable/input_bg"
+                        android:layout_marginBottom="20dp" />
+
+                    <!-- SECTION -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SECTION"
+                        android:textSize="11sp"
+                        android:textColor="#4A90E2"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.12"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/etSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp"
+                        android:hint="e.g. 3"
+                        android:inputType="textCapCharacters"
+                        android:padding="16dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#8892A4"
+                        android:textSize="15sp"
+                        android:background="@drawable/input_bg"
+                        android:layout_marginBottom="28dp" />
+
+                    <!-- EXCEL UPLOAD AREA -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="STUDENT LIST"
+                        android:textSize="11sp"
+                        android:textColor="#4A90E2"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.12"
+                        android:layout_marginBottom="8dp" />
+
+                    <!--
+                        Tap this whole area to open file picker for .xlsx
+                        In Kotlin: layoutUploadArea.setOnClickListener { openFilePicker() }
+                        After file selected: show filename in tvFileName, hide tvFileHint
+                    -->
+                    <LinearLayout
+                        android:id="@+id/layoutUploadArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="24dp"
+                        android:background="@drawable/upload_area_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_marginBottom="28dp">
+
+                        <!-- Upload icon box -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardElevation="0dp"
+                            app:cardBackgroundColor="#1A2D4A"
+                            android:layout_marginBottom="12dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="📊"
+                                android:textSize="24sp"
+                                android:gravity="center" />
+
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Hint text — hidden after file selected -->
+                        <TextView
+                            android:id="@+id/tvFileHint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tap to upload Excel sheet"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=".xlsx files only"
+                            android:textSize="12sp"
+                            android:textColor="#3D4557" />
+
+                        <!-- File name — shown after file selected, GONE by default -->
+                        <TextView
+                            android:id="@+id/tvFileName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text=""
+                            android:textSize="12sp"
+                            android:textColor="#3DDC84"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <!-- CREATE CLASS BUTTON -->
+                    <Button
+                        android:id="@+id/btnCreateClass"
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp"
+                        android:text="CREATE CLASS"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"
+                        android:background="@drawable/btn_primary"
+                        android:layout_marginBottom="12dp" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        android:indeterminateTint="#4A90E2" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Back link -->
+            <TextView
+                android:id="@+id/tvGoBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="← Back to Dashboard"
+                android:textSize="12sp"
+                android:textColor="#4A90E2"
+                android:paddingTop="20dp"
+                android:paddingBottom="8dp"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

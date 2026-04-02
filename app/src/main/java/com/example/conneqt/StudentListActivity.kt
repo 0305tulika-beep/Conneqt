@@ -1,94 +1,125 @@
 package com.example.conneqt
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.conneqt.databinding.ActivityStudentListBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 class StudentListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityStudentListBinding
+    private lateinit var db: FirebaseFirestore
+    private val studentList = mutableListOf<StudentModel>()
     private lateinit var studentAdapter: StudentAdapter
-
-    private val originalList = mutableListOf<StudentModel>()
-    private val displayList  = mutableListOf<StudentModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStudentListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val className = intent.getStringExtra("CLASS_NAME") ?: "Class"
-        val classId   = intent.getStringExtra("CLASS_ID")   ?: ""
+        db = FirebaseFirestore.getInstance()
 
-        setupToolbar(className)
-        setupRecyclerView()
-        setupSearch()
-        loadStudents(classId)
-    }
+        val classId   = intent.getStringExtra("CLASS_ID") ?: ""
+        val className = intent.getStringExtra("CLASS_NAME") ?: "Students"
 
-    private fun setupToolbar(className: String) {
+        Log.d("STUDENTS", "Opening class: '$className' with id: '$classId'")
+
+        // ── Toolbar ────────────────────────────────────────────────
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = className
+        supportActionBar?.title = className.replace("\n", " — ")
         binding.toolbar.setNavigationOnClickListener { finish() }
-    }
 
-    private fun setupRecyclerView() {
-        studentAdapter = StudentAdapter(displayList)
+        // ── Header card ────────────────────────────────────────────
+        binding.tvHeaderClassName.text = className.replace("\n", " — ")
+
+        // ── Adapter + RecyclerView ─────────────────────────────────
+        studentAdapter = StudentAdapter(studentList)
         binding.rvStudents.apply {
             layoutManager = LinearLayoutManager(this@StudentListActivity)
             adapter = studentAdapter
         }
-    }
 
-    private fun setupSearch() {
-        binding.etSearch.addTextChangedListener { text ->
-            studentAdapter.filter(text.toString(), originalList)
-            if (displayList.isEmpty()) {
-                binding.layoutEmptyStudents.visibility = View.VISIBLE
-                binding.rvStudents.visibility = View.GONE
-            } else {
-                binding.layoutEmptyStudents.visibility = View.GONE
-                binding.rvStudents.visibility = View.VISIBLE
+        // ── Search filter ──────────────────────────────────────────
+        binding.etSearch.addTextChangedListener(object : android.text.TextWatcher {
+            override fun afterTextChanged(s: android.text.Editable?) {
+                studentAdapter.filter(s.toString())
             }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        // ── Load students ──────────────────────────────────────────
+        if (classId.isEmpty()) {
+            Log.e("STUDENTS", "Class ID is empty! Cannot load students.")
+            binding.tvHeaderStudentCount.text = "Error: No class ID"
+            return
         }
+
+        loadStudents(classId)
     }
 
     private fun loadStudents(classId: String) {
-        val dummyStudents = listOf(
-            StudentModel("1", "Aryan Mehta", "2021-CS-001", "+91 98765 43210", "aryan@email.com"),
-            StudentModel("2", "Riya Sharma", "2021-CS-002", "+91 91234 56789", "riya@email.com"),
-            StudentModel("3", "Karan Singh", "2021-CS-003", "+91 99887 76655", "karan@email.com"),
-            StudentModel("4", "Priya Patel", "2021-CS-004", "+91 88776 65544", "priya@email.com"),
-            StudentModel("5", "Rohit Kumar", "2021-CS-005", "+91 77665 54433", "rohit@email.com"),
-            StudentModel("6", "Sneha Gupta", "2021-CS-006", "+91 66554 43322", "sneha@email.com"),
-            StudentModel("7", "Amit Verma",  "2021-CS-007", "+91 55443 32211", "amit@email.com"),
-            StudentModel("8", "Pooja Reddy", "2021-CS-008", "+91 44332 21100", "pooja@email.com"),
-        )
+        Log.d("STUDENTS", "Fetching from Firestore: classes/$classId/students")
 
-        originalList.addAll(dummyStudents)
-        displayList.addAll(dummyStudents)
-        studentAdapter.notifyDataSetChanged()
+        db.collection("classes")
+            .document(classId)
+            .collection("students")
+            .get()
+            .addOnSuccessListener { result ->
+                Log.d("STUDENTS", "Firestore returned ${result.size()} documents")
 
-        updateHeaderStats()
-        updateEmptyState()
-    }
+                studentList.clear()
 
-    private fun updateHeaderStats() {
-        val total = originalList.size
-        binding.tvHeaderStudentCount.text = "$total students"
-    }
+                // ── Correctly map each document to StudentModel ────────
+                val students = result.documents.mapNotNull { doc ->
+                    val name = doc.getString("name") ?: ""
+                    if (name.isEmpty()) {
+                        Log.w("STUDENTS", "Skipping doc ${doc.id} — empty name")
+                        return@mapNotNull null
+                    }
+                    val student = StudentModel(
+                        id        = doc.getString("id") ?: doc.id,
+                        name      = name,
+                        studentNo = doc.getString("studentNo") ?: "",
+                        phone     = doc.getString("phone") ?: "",
+                        email     = doc.getString("email") ?: ""
+                    )
+                    Log.d("STUDENTS", "Loaded: ${student.name} | ${student.studentNo}")
+                    student  // ← this is the return value of mapNotNull
+                }
 
-    private fun updateEmptyState() {
-        if (originalList.isEmpty()) {
-            binding.layoutEmptyStudents.visibility = View.VISIBLE
-            binding.rvStudents.visibility          = View.GONE
-        } else {
-            binding.layoutEmptyStudents.visibility = View.GONE
-            binding.rvStudents.visibility          = View.VISIBLE
-        }
+                // ── Sort by student number numerically ─────────────────
+                val sorted = students.sortedWith(compareBy {
+                    it.studentNo.filter { c -> c.isDigit() }
+                        .toLongOrNull() ?: Long.MAX_VALUE
+                })
+
+                studentList.addAll(sorted)
+
+                Log.d("STUDENTS", "Total students loaded: ${studentList.size}")
+
+                // ── Update header ──────────────────────────────────────
+                binding.tvHeaderStudentCount.text = "${studentList.size} students"
+
+                // ── Refresh adapter ────────────────────────────────────
+                studentAdapter.notifyDataSetChanged()
+
+                // ── Show/hide empty state ──────────────────────────────
+                if (studentList.isEmpty()) {
+                    binding.layoutEmptyStudents.visibility = View.VISIBLE
+                    binding.rvStudents.visibility          = View.GONE
+                } else {
+                    binding.layoutEmptyStudents.visibility = View.GONE
+                    binding.rvStudents.visibility          = View.VISIBLE
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("STUDENTS", "Firestore fetch failed: ${e.message}")
+                binding.tvHeaderStudentCount.text = "Failed to load"
+            }
     }
 }

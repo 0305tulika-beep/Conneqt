@@ -38,6 +38,21 @@
             android:theme="@style/Theme.Conneqt"
             android:exported="false">
         </activity>
+
+        <activity
+            android:name=".ProfileActivity"
+            android:theme="@style/Theme.Conneqt"
+            android:exported="false" />
+
+        <activity
+            android:name=".NewClassActivity"
+            android:theme="@style/Theme.Conneqt"
+            android:exported="false" />
+
+        <activity
+            android:name=".StudentListActivity"
+            android:theme="@style/Theme.Conneqt"
+            android:exported="false" />
     </application>
 
 </manifest>
