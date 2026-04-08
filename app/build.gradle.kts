@@ -8,6 +8,7 @@ android {
     namespace = "com.example.conneqt"
     compileSdk = 34
 
+
     defaultConfig {
         applicationId = "com.example.conneqt"
         minSdk = 26
@@ -26,17 +27,22 @@ android {
             )
         }
     }
+
     packaging {
         resources {
             excludes += setOf(
                 "META-INF/DEPENDENCIES",
                 "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
                 "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
                 "META-INF/ASL2.0",
-                "META-INF/*.kotlin_module"
+                "META-INF/*.kotlin_module",
+                "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -59,17 +65,26 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
-    // Firebase BOM must come first — it manages all Firebase versions
+    // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-analytics")
 
+    // Apache POI — remove xmlbeans, it's bundled inside poi-ooxml already
+//    implementation("org.apache.poi:poi:5.2.3")
+//    implementation("org.apache.poi:poi-ooxml:5.2.3") {
+//        exclude(group = "org.apache.xmlbeans", module = "xmlbeans")
+//    }
+
+    implementation("org.apache.poi:poi:5.2.3")
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
+    implementation("org.apache.xmlbeans:xmlbeans:5.2.0")
+    implementation("commons-io:commons-io:2.13.0")
+
     // Testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    implementation("org.apache.poi:poi:5.2.3")
-    implementation("org.apache.poi:poi-ooxml:5.2.3")
-    implementation("org.apache.xmlbeans:xmlbeans:5.1.1")
+   // implementation("org.apache.xmlbeans:xmlbeans:5.1.1")
 }
