@@ -10,13 +10,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.android.material.textfield.TextInputEditText
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
-    private lateinit var etEmail: EditText
-    private lateinit var etPassword: EditText
+    private lateinit var etEmail: TextInputEditText
+    private lateinit var etPassword: TextInputEditText
     private lateinit var btnLogin: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var tvGoToSignup: TextView
@@ -28,8 +29,8 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        etEmail      = findViewById(R.id.etEmail)
-        etPassword   = findViewById(R.id.etPassword)
+        etEmail    = findViewById(R.id.etEmail)
+        etPassword = findViewById(R.id.etPassword)
         btnLogin     = findViewById(R.id.btnLogin)
         progressBar  = findViewById(R.id.progressBar)
         tvGoToSignup = findViewById(R.id.tvGoToSignup)
@@ -76,24 +77,36 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginUser(email: String, password: String) {
         setLoading(true)
-
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 setLoading(false)
                 if (task.isSuccessful) {
-                    navigateToDashboard()
-                } else {
-                    val errorMsg = when {
-                        task.exception?.message?.contains("no user record") == true ->
-                            "No account found with this email"
-                        task.exception?.message?.contains("password is invalid") == true ->
-                            "Incorrect password"
-                        task.exception?.message?.contains("network") == true ->
-                            "Network error. Check your connection."
-                        else -> task.exception?.message ?: "Login failed"
+                    val user = auth.currentUser
+                    if (user != null && user.isEmailVerified) {
+                        navigateToDashboard()          // ← verified, proceed
+                    } else {
+                        // Not verified — sign them out and prompt
+                        auth.signOut()
+                        Toast.makeText(
+                            this,
+                            "Please verify your email first. Check your inbox.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        // Optional: offer to resend
+                        resendVerificationEmail(email, password)
                     }
-                    Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show()
+                } else {
+                    // your existing error handling...
                 }
+            }
+    }
+
+    private fun resendVerificationEmail(email: String, password: String) {
+        // Sign in silently just to resend, then sign out again
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnSuccessListener {
+                auth.currentUser?.sendEmailVerification()
+                auth.signOut()
             }
     }
 

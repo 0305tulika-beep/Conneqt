@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    SCREEN 2: LoginActivity
-    Professor enters email + password.
-    On success → navigates to MainActivity (which hosts the bottom navbar).
-    finish() is called so back button cannot return to login.
--->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0A0E1A">
-
-    <!-- Decorative top-right glow -->
-    <View
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="-100dp"
-        android:layout_marginEnd="-100dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -67,7 +53,6 @@
 
             <!-- Login Card -->
             <androidx.cardview.widget.CardView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="24dp"
@@ -108,18 +93,28 @@
                         android:letterSpacing="0.12"
                         android:layout_marginBottom="8dp" />
 
-                    <EditText
-                        android:id="@+id/etEmail"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilEmail"
                         android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:hint="professor@university.edu"
-                        android:inputType="textEmailAddress"
-                        android:padding="16dp"
-                        android:textColor="#3D4557"
-                        android:textColorHint="#B0BEC5"
-                        android:textSize="15sp"
-                        android:background="@drawable/input_bg"
-                        android:layout_marginBottom="20dp" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        app:boxStrokeColor="#4A90E2"
+                        app:boxStrokeWidth="1dp"
+                        app:hintEnabled="false">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="54dp"
+                            android:hint="professor@university.edu"
+                            android:inputType="textEmailAddress"
+                            android:padding="16dp"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#B0BEC5"
+                            android:textSize="15sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Password -->
                     <TextView
@@ -132,18 +127,30 @@
                         android:letterSpacing="0.12"
                         android:layout_marginBottom="8dp" />
 
-                    <EditText
-                        android:id="@+id/etPassword"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilPassword"
                         android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:hint="••••••••"
-                        android:inputType="textPassword"
-                        android:padding="16dp"
-                        android:textColor="#3D4557"
-                        android:textColorHint="#B0BEC5"
-                        android:textSize="15sp"
-                        android:background="@drawable/input_bg"
-                        android:layout_marginBottom="28dp" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="28dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="#4A90E2"
+                        app:boxStrokeColor="#4A90E2"
+                        app:boxStrokeWidth="1dp"
+                        app:hintEnabled="false">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="54dp"
+                            android:hint="••••••••"
+                            android:inputType="textPassword"
+                            android:padding="16dp"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#B0BEC5"
+                            android:textSize="15sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
                         android:id="@+id/btnLogin"
@@ -205,7 +212,7 @@
                 android:textSize="11sp"
                 android:textColor="#2A3147"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="24dp" />
 
         </LinearLayout>
     </ScrollView>

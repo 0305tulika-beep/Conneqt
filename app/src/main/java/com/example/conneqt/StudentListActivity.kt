@@ -14,16 +14,14 @@ class StudentListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         binding = ActivityStudentListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val classId   = intent.getStringExtra("CLASS_ID") ?: ""
         val className = intent.getStringExtra("CLASS_NAME") ?: "Students"
 
-        // ── Toolbar ────────────────────────────────────────────────
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = className.replace("\n", " — ")
+        // ── Toolbar back button ─────────────────────────────────────
         binding.toolbar.setNavigationOnClickListener { finish() }
 
         // ── Header ─────────────────────────────────────────────────
@@ -54,21 +52,18 @@ class StudentListActivity : AppCompatActivity() {
     }
 
     private fun loadStudents(classId: String) {
-        // Load directly from local storage — instant, no network needed
         val students = LocalStorage.getStudents(this, classId)
 
-        studentList.clear()
-
-        // Sort by student number
         val sorted = students.sortedWith(compareBy {
             it.studentNo.filter { c -> c.isDigit() }.toLongOrNull() ?: Long.MAX_VALUE
         })
 
-        studentList.addAll(sorted)
-        binding.tvHeaderStudentCount.text = "${studentList.size} students"
-        studentAdapter.notifyDataSetChanged()
+        binding.tvHeaderStudentCount.text = "${sorted.size} students"
 
-        if (studentList.isEmpty()) {
+        // updateList() correctly populates both fullList and displayList
+        studentAdapter.updateList(sorted)
+
+        if (sorted.isEmpty()) {
             binding.layoutEmptyStudents.visibility = View.VISIBLE
             binding.rvStudents.visibility          = View.GONE
         } else {

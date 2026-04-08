@@ -13,16 +13,18 @@ import com.example.conneqt.databinding.ProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.android.material.textfield.TextInputEditText
 
 class SignupActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
 
-    private lateinit var etName: EditText
-    private lateinit var etEmail: EditText
-    private lateinit var etPassword: EditText
-    private lateinit var etConfirmPassword: EditText
+    private lateinit var etName:            TextInputEditText
+    private lateinit var etEmail:           TextInputEditText
+    private lateinit var etPassword:        TextInputEditText
+    private lateinit var etConfirmPassword: TextInputEditText
+
     private lateinit var btnSignup: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var tvGoToLogin: TextView
@@ -128,25 +130,40 @@ class SignupActivity : AppCompatActivity() {
 
     private fun saveProfessorToFirestore(uid: String, name: String, email: String) {
         val professorData = hashMapOf(
-            "uid"       to uid,
-            "name"      to name,
-            "email"     to email,
-            "createdAt" to System.currentTimeMillis()
+            "uid" to uid, "name" to name,
+            "email" to email, "createdAt" to System.currentTimeMillis()
         )
 
-        firestore.collection("professors")
-            .document(uid)
-            .set(professorData)
+        firestore.collection("professors").document(uid).set(professorData)
             .addOnSuccessListener {
                 setLoading(false)
-                navigateToDashboard()
+                sendVerificationEmail()  // ← NEW
             }
             .addOnFailureListener {
                 setLoading(false)
-                // Firestore write failed but Auth account exists — still proceed
-                // The Firestore doc can be recreated later from Auth data
-                Toast.makeText(this, "Account created!", Toast.LENGTH_SHORT).show()
-                navigateToDashboard()
+                sendVerificationEmail()  // ← still send even if Firestore fails
+            }
+    }
+
+    private fun sendVerificationEmail() {
+        auth.currentUser?.sendEmailVerification()
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign out — force them to verify before logging in
+                    auth.signOut()
+                    Toast.makeText(
+                        this,
+                        "Verification email sent to your inbox. Please verify before signing in.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    // Go back to LoginActivity, don't navigate to dashboard
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, "Could not send verification email", Toast.LENGTH_SHORT).show()
+                }
             }
     }
 

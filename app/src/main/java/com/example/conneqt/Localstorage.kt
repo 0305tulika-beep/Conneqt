@@ -1,25 +1,22 @@
 package com.example.conneqt
 
 import android.content.Context
+import com.google.firebase.auth.FirebaseAuth
 import org.json.JSONArray
 import org.json.JSONObject
 
-/**
- * LocalStorage — saves and loads classes + students using SharedPreferences.
- * No Firebase, no internet needed. Data persists across app restarts.
- *
- * Usage:
- *   LocalStorage.saveClass(context, classModel)
- *   LocalStorage.getAllClasses(context)
- *   LocalStorage.getStudents(context, classId)
- *   LocalStorage.deleteClass(context, classId)
- */
 object LocalStorage {
 
-    private const val PREFS_NAME   = "conneqt_prefs"
-    private const val KEY_CLASSES  = "classes"
+    private const val PREFS_NAME  = "conneqt_prefs"
 
-    // ── Save a new class (with its students embedded) ─────────────────
+    // ── Each professor gets their own key using their Firebase UID ──
+    private fun classesKey(): String {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+            ?: "guest"
+        return "classes_$uid"
+    }
+
+    // ── Save a new class (with its students embedded) ───────────────
     fun saveClass(context: Context, classModel: ClassModel, students: List<StudentModel>) {
         val prefs   = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val classes = getAllClassesJson(context)
@@ -32,7 +29,6 @@ object LocalStorage {
             put("emoji",        classModel.emoji)
             put("isActive",     classModel.isActive)
 
-            // Embed students directly in the class JSON
             val studentsArray = JSONArray()
             for (s in students) {
                 studentsArray.put(JSONObject().apply {
@@ -47,13 +43,13 @@ object LocalStorage {
         }
 
         classes.put(classJson)
-        prefs.edit().putString(KEY_CLASSES, classes.toString()).commit()
+        prefs.edit().putString(classesKey(), classes.toString()).apply()
     }
 
-    // ── Get all classes (without student details) ──────────────────────
+    // ── Get all classes for the current professor ───────────────────
     fun getAllClasses(context: Context): MutableList<ClassModel> {
-        val classes    = getAllClassesJson(context)
-        val result     = mutableListOf<ClassModel>()
+        val classes = getAllClassesJson(context)
+        val result  = mutableListOf<ClassModel>()
 
         for (i in 0 until classes.length()) {
             val obj = classes.getJSONObject(i)
@@ -71,7 +67,7 @@ object LocalStorage {
         return result
     }
 
-    // ── Get students for a specific class ──────────────────────────────
+    // ── Get students for a specific class ───────────────────────────
     fun getStudents(context: Context, classId: String): List<StudentModel> {
         val classes  = getAllClassesJson(context)
         val students = mutableListOf<StudentModel>()
@@ -98,7 +94,7 @@ object LocalStorage {
         return students
     }
 
-    // ── Delete a class by ID ───────────────────────────────────────────
+    // ── Delete a class by ID ────────────────────────────────────────
     fun deleteClass(context: Context, classId: String) {
         val prefs      = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val classes    = getAllClassesJson(context)
@@ -110,13 +106,13 @@ object LocalStorage {
                 newClasses.put(obj)
             }
         }
-        prefs.edit().putString(KEY_CLASSES, newClasses.toString()).commit()
+        prefs.edit().putString(classesKey(), newClasses.toString()).apply()
     }
 
-    // ── Internal: get raw JSON array of all classes ────────────────────
+    // ── Internal: get raw JSON array for current professor ──────────
     private fun getAllClassesJson(context: Context): JSONArray {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val json  = prefs.getString(KEY_CLASSES, "[]") ?: "[]"
+        val json  = prefs.getString(classesKey(), "[]") ?: "[]"
         return try {
             JSONArray(json)
         } catch (e: Exception) {

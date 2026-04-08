@@ -13,6 +13,7 @@ import com.example.conneqt.databinding.ActivityNewClassBinding
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.util.UUID
+import com.google.firebase.auth.FirebaseAuth
 
 class NewClassActivity : AppCompatActivity() {
 
@@ -170,6 +171,12 @@ class NewClassActivity : AppCompatActivity() {
         section: String,
         students: List<StudentModel>
     ) {
+        // Safety check — should never happen, but just in case
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            Toast.makeText(this, "Not logged in. Please sign in again.", Toast.LENGTH_LONG).show()
+            return
+        }
+
         val classId    = UUID.randomUUID().toString()
         val uploadDate = java.text.SimpleDateFormat(
             "MMM yyyy", java.util.Locale.getDefault()

@@ -12,7 +12,7 @@ class StudentAdapter(
     private val fullList: MutableList<StudentModel>
 ) : RecyclerView.Adapter<StudentAdapter.ViewHolder>() {
 
-    private val displayList = mutableListOf<StudentModel>().apply { addAll(fullList) }
+    private val displayList = mutableListOf<StudentModel>()
 
     private val avatarColors = listOf(
         "#3DDC84", "#2979FF", "#FF6D00", "#D500F9", "#FF1744", "#00BCD4"
@@ -55,7 +55,6 @@ class StudentAdapter(
                     .replace("-", "")
                     .replace("+", "")
 
-                // Add country code 91 (India) if not already present
                 val fullPhone = if (phone.startsWith("91") && phone.length > 10)
                     phone else "91$phone"
 
@@ -66,25 +65,31 @@ class StudentAdapter(
                     }
                     it.context.startActivity(intent)
                 } catch (e: Exception) {
-                    // WhatsApp not installed — open in browser
-                    val intent = Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://wa.me/$fullPhone"))
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://wa.me/$fullPhone")
+                    )
                     it.context.startActivity(intent)
                 }
             }
 
             // ── Call button ────────────────────────────────────────
             btnCall.setOnClickListener {
-                val intent = Intent(Intent.ACTION_DIAL,
-                    Uri.parse("tel:${student.phone}"))
+                val intent = Intent(
+                    Intent.ACTION_DIAL,
+                    Uri.parse("tel:${student.phone}")
+                )
                 it.context.startActivity(intent)
             }
 
             // ── Email button ───────────────────────────────────────
             btnEmail.setOnClickListener {
                 if (student.email.isEmpty()) {
-                    Toast.makeText(it.context,
-                        "No email address for this student", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        it.context,
+                        "No email address for this student",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@setOnClickListener
                 }
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
@@ -95,14 +100,26 @@ class StudentAdapter(
                 try {
                     it.context.startActivity(intent)
                 } catch (e: Exception) {
-                    Toast.makeText(it.context,
-                        "No email app found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        it.context,
+                        "No email app found",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
     }
 
-    // ── Filter by name or student number ──────────────────────────────
+    // ── Called after students are loaded from storage ──────────────
+    fun updateList(newList: List<StudentModel>) {
+        fullList.clear()
+        fullList.addAll(newList)
+        displayList.clear()
+        displayList.addAll(newList)
+        notifyDataSetChanged()
+    }
+
+    // ── Filter by name or student number ──────────────────────────
     fun filter(query: String) {
         displayList.clear()
         if (query.isEmpty()) {
